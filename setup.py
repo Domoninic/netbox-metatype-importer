@@ -11,7 +11,7 @@ with open(readme) as fh:
 
 setup(
     name="netbox-metatype-importer",
-    version="4.7.0",
+    version="4.7.3",
     description=description,
     long_description=long_description,
     long_description_content_type="text/markdown",
