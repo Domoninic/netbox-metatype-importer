@@ -69,6 +69,8 @@ def related_object_forms():
             ('console-server-ports', forms.ConsoleServerPortTemplateImportForm),
             ('power-ports', forms.PowerPortTemplateImportForm),
             ('power-outlets', forms.PowerOutletTemplateImportForm),
+            ('cooling-intakes', forms.CoolingIntakeTemplateImportForm),
+            ('cooling-outflows', forms.CoolingOutflowTemplateImportForm),
             ('interfaces', forms.InterfaceTemplateImportForm),
             ('rear-ports', forms.RearPortTemplateImportForm),
             ('front-ports', forms.FrontPortTemplateImportForm),
