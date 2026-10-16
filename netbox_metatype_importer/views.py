@@ -17,6 +17,7 @@ from netbox_metatype_importer.graphql.gql import GQLError, GitHubGqlAPI
 from utilities.exceptions import AbortTransaction, PermissionsViolation
 from utilities.forms.bulk_import import BulkImportForm
 from utilities.views import ContentTypePermissionRequiredMixin, GetReturnURLMixin
+from .actions import DeviceTypeActions, ModuleTypeActions, RackTypeActions
 from .choices import TypeChoices
 from .filters import MetaTypeFilterSet
 from .forms import MetaTypeFilterForm
@@ -31,7 +32,7 @@ class MetaDeviceTypeListView(generic.ObjectListView):
     filterset = MetaTypeFilterSet
     filterset_form = MetaTypeFilterForm
     table = MetaTypeTable
-    actions = ()
+    actions = DeviceTypeActions
     template_name = 'netbox_metatype_importer/metadevicetype_list.html'
 
 
@@ -40,7 +41,7 @@ class MetaModuleTypeListView(generic.ObjectListView):
     filterset = MetaTypeFilterSet
     filterset_form = MetaTypeFilterForm
     table = MetaTypeTable
-    actions = ()
+    actions = ModuleTypeActions
     template_name = 'netbox_metatype_importer/metamoduletype_list.html'
 
 
@@ -49,7 +50,7 @@ class MetaRackTypeListView(generic.ObjectListView):
     filterset = MetaTypeFilterSet
     filterset_form = MetaTypeFilterForm
     table = MetaTypeTable
-    actions = ()
+    actions = RackTypeActions
     template_name = 'netbox_metatype_importer/metaracktype_list.html'
 
 

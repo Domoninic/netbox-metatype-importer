@@ -1,0 +1,83 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 552bc80..1f3488a 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -21,7 +21,7 @@ jobs:
+       lint-runs-on: ci-small
+       runs-on: ci-test
+       plugin-name: 'netbox_metatype_importer'
+-      netbox-version: v4.6.1
++      netbox-version: v4.7.2
+       coverage-minimum: 45
+     secrets:
+       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+diff --git a/README.md b/README.md
+index 2cda638..7115a2e 100644
+--- a/README.md
++++ b/README.md
+@@ -20,6 +20,7 @@ To use GraphQL API you need to set GitHub personal access token in plugin settin
+ |     4.4.x      |     0.8.x      |
+ |     4.5.x      |     0.9.x      |
+ |     4.6.x      |     0.10.x     |
++|     4.7.x      |     0.11.x     |
+ 
+ ## Installation
+ 
+diff --git a/netbox_metatype_importer/__init__.py b/netbox_metatype_importer/__init__.py
+index b10312e..8943641 100644
+--- a/netbox_metatype_importer/__init__.py
++++ b/netbox_metatype_importer/__init__.py
+@@ -13,8 +13,8 @@ class NetBoxMetatypeImporterConfig(PluginConfig):
+     author = metadata.get('Author')
+     author_email = metadata.get('Author-email')
+     base_url = "meta-types"
+-    min_version = '4.6.0'
+-    max_version = '4.6.99'
++    min_version = '4.7.0'
++    max_version = '4.7.99'
+     default_settings = {
+         'repo_owner': 'netbox-community',
+         'repo': 'devicetype-library',
+diff --git a/netbox_metatype_importer/tests/test_utils.py b/netbox_metatype_importer/tests/test_utils.py
+index 5eb6ad3..7b87049 100644
+--- a/netbox_metatype_importer/tests/test_utils.py
++++ b/netbox_metatype_importer/tests/test_utils.py
+@@ -7,3 +7,12 @@ from netbox_metatype_importer.utils import related_object_forms
+ class RelatedObjectFormsTest(SimpleTestCase):
+     def test_netbox_46_port_mappings_are_imported(self):
+         self.assertIs(related_object_forms()['port-mappings'], forms.PortTemplateMappingImportForm)
++
++    def test_netbox_47_cooling_templates_are_imported(self):
++        mapping = related_object_forms()
++        self.assertIs(mapping['cooling-intakes'], forms.CoolingIntakeTemplateImportForm)
++        self.assertIs(mapping['cooling-outflows'], forms.CoolingOutflowTemplateImportForm)
++
++    def test_cooling_intakes_precede_outflows(self):
++        keys = list(related_object_forms())
++        self.assertLess(keys.index('cooling-intakes'), keys.index('cooling-outflows'))
+diff --git a/netbox_metatype_importer/utils.py b/netbox_metatype_importer/utils.py
+index 9d6be65..387c21f 100644
+--- a/netbox_metatype_importer/utils.py
++++ b/netbox_metatype_importer/utils.py
+@@ -69,6 +69,8 @@ def related_object_forms():
+             ('console-server-ports', forms.ConsoleServerPortTemplateImportForm),
+             ('power-ports', forms.PowerPortTemplateImportForm),
+             ('power-outlets', forms.PowerOutletTemplateImportForm),
++            ('cooling-intakes', forms.CoolingIntakeTemplateImportForm),
++            ('cooling-outflows', forms.CoolingOutflowTemplateImportForm),
+             ('interfaces', forms.InterfaceTemplateImportForm),
+             ('rear-ports', forms.RearPortTemplateImportForm),
+             ('front-ports', forms.FrontPortTemplateImportForm),
+diff --git a/setup.py b/setup.py
+index 429e306..dbf8f60 100644
+--- a/setup.py
++++ b/setup.py
+@@ -11,7 +11,7 @@ with open(readme) as fh:
+ 
+ setup(
+     name='netbox-metatype-importer',
+-    version='0.10.0',
++    version='0.11.0',
+     description=description,
+     long_description=long_description,
+     long_description_content_type="text/markdown",
